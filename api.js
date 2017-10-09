@@ -22,20 +22,21 @@ async function getDropList() {
   const $ = await get('/season/latest/droplists/');
   return Array.from($('.block').map((i, x) => ({
     url: x.attribs.href,
-    name: $(x).text().trim(),
+    name: $(x).text().replace(/\s\s+/g, ' ').trim(),
     slug: utils.slugify($(x).text().trim())
   })));
 }
 
 async function getProducts(url) {
   const $ = await get(url);
-  const cards = $('.card-details');
+  const cards = $('.card');
   return Array.from(cards.map((i, card) => {
     const imageUrl = `${baseUrl}/${$(card).find('img')[0].attribs.src}`;
     let name = $($(card).find('.name')[0]).text().trim();
     const price = $($(card).find('.label-price')[0]).text().trim();
-    name = name.replace(/[\/®]/g, ' ');
-    return {imageUrl, name, price, keywords: name.split(' ').filter(x => !!x)};
+    const category = $($(card).find('.category')[0]).text().replace(/\s\s+/g, ' ').trim();
+    name = name.replace(/\s\s+/g, ' ').trim();
+    return {imageUrl, name, price, keywords: name.split(' ').filter(x => !!x), category};
   }));
 }
 
