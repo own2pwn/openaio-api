@@ -50,11 +50,12 @@ async function getSupremeProducts(category) {
 
 async function getProducts(url) {
   const $ = await get(baseCommunityUrl + url);
-  const cards = $('.card');
+  const cards = $('.card-details');
   return Array.from(cards.map((i, card) => {
     const imageUrl = `${baseCommunityUrl}/${$(card).find('img')[0].attribs.src}`;
     let name = $($(card).find('.name')[0]).text().trim();
-    const price = $($(card).find('.label-price')[0]).text().trim();
+    const labelPrice = $($(card).find('.label-price')[0]);
+    const price = labelPrice ? labelPrice.text().trim() : 'unknown';
     const category = $($(card).find('.category')[0]).text().replace(/\s\s+/g, ' ').trim();
     name = name.replace(/\s\s+/g, ' ').trim();
     return {imageUrl, name, price, keywords: name.split(' ').filter(x => !!x), category};
