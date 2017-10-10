@@ -45,6 +45,7 @@ async function getSupremeProducts(category) {
     name: $($(x).find('h1')[0]).text(),
     color: $($(x).find('p')[0]).text(),
     soldOut: $(x).find('.sold_out_tag').length >= 1,
+    category,
   })));
 }
 
@@ -66,6 +67,15 @@ const getProductsCached = cached(getProducts, 10);
 const getDropsCached = cached(getDropList, 10);
 const getCategoriesCached = cached(getSupremeCategories, 0.10);
 const getSupremeProductsCached = cached(getSupremeProducts, 0.10);
+
+app.get('/stock', async (req, res) => {
+  const categories = await getCategoriesCached();
+  let products = [];
+  for (let i = 0; i < categories.length; i += 1) {
+    products.push(...await getSupremeProductsCached(categories[i].name));
+  }
+  res.json(products);
+});
 
 app.get('/categories', async (req, res) => {
   res.json(await getCategoriesCached());

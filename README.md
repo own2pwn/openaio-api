@@ -17,3 +17,7 @@ List the available categories of products in the Supreme Shop.
 ### /categories/:category/products
 
 List all products for the specified category.
+
+### /stock
+
+List every products available on the online shop.
