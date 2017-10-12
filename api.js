@@ -65,16 +65,17 @@ async function getProducts(url) {
 
 const getProductsCached = cached(getProducts, 10);
 const getDropsCached = cached(getDropList, 10);
-const getCategoriesCached = cached(getSupremeCategories, 0.10);
+const getCategoriesCached = cached(getSupremeCategories, 0.15);
 const getSupremeProductsCached = cached(getSupremeProducts, 0.10);
 
 app.get('/stock', async (req, res) => {
   const categories = await getCategoriesCached();
-  let products = [];
+  const promises = [];
   for (let i = 0; i < categories.length; i += 1) {
-    products.push(...await getSupremeProductsCached(categories[i].name));
+    promises.push(getSupremeProductsCached(categories[i].name));
   }
-  res.json(products);
+  const products = await Promise.all(promises);
+  res.json([].concat.apply([], products));
 });
 
 app.get('/categories', async (req, res) => {
