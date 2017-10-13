@@ -57,7 +57,7 @@ async function getProducts(url) {
     let name = $($(card).find('.name')[0]).text().trim();
     const labelPrice = $($(card).find('.label-price')[0]);
     const price = labelPrice ? labelPrice.text().trim() : 'unknown';
-    const category = $($(card).find('.category')[0]).text().replace(/\s\s+/g, ' ').trim();
+    const category = $($(card).parent().find('.category')[0]).text().replace(/\s\s+/g, ' ').trim();
     name = name.replace(/\s\s+/g, ' ').trim();
     return {imageUrl, name, price, keywords: name.split(' ').filter(x => !!x), category};
   }));
