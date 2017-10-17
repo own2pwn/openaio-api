@@ -4,6 +4,7 @@ const app = express();
 const cheerio = require('cheerio');
 const cached = require('./cache');
 const utils = require('./utils');
+const url = require('url');
 
 const baseCommunityUrl = 'https://supremecommunity.com';
 const baseSupremeUrl = 'http://supremenewyork.com';
@@ -46,7 +47,7 @@ async function getSupremeProducts(category) {
     color: $($(x).find('p')[0]).text(),
     soldOut: $(x).find('.sold_out_tag').length >= 1,
     category,
-    imageUrl: $(x).find('img')[0].attribs.src,
+    imageUrl: url.resolve(baseSupremeUrl, $(x).find('img')[0].attribs.src),
   })));
 }
 
