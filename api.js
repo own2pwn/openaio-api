@@ -46,6 +46,7 @@ async function getSupremeProducts(category) {
     color: $($(x).find('p')[0]).text(),
     soldOut: $(x).find('.sold_out_tag').length >= 1,
     category,
+    imageUrl: $(x).find('img')[0].attribs.src,
   })));
 }
 
